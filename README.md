@@ -9,6 +9,7 @@ Golang TCP server
   </li>
 </ul>
 
+<img src='https://raw.githubusercontent.com/fillipehmeireles/jailshell-server-golang/master/doc/jailshell-2021-04-19_19.12.52.gif'/>
 <table>
   <thead>
     <th> Command </th>
