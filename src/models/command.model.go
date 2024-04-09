@@ -1,7 +1,7 @@
 package models
 
 // Trigger is a command trigger function
-type Trigger func(commandData ...string) []string
+type Trigger func(commandData ...string) ([]string, error)
 
 // Command is a model of commands
 type Command struct {

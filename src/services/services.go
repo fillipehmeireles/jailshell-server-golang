@@ -9,31 +9,31 @@ import (
 )
 
 // SendFile sends file to client
-func SendFile(filename, clientAddr string) []string {
+func SendFile(filename, clientAddr string) ([]string, error) {
 
 	var result = make([]string, 1)
 	const bufferSize = 1024
 
-	file, erro := os.Open(filename)
-	if erro != nil {
-		log.Fatal(erro)
+	file, err := os.Open(filename)
+	if err != nil {
+		return []string{}, err
 	}
 
-	fileInfo, erro := file.Stat()
-	if erro != nil {
-		log.Fatal(erro)
+	fileInfo, err := file.Stat()
+	if err != nil {
+		return []string{}, err
 	}
 	fileName := utils.PrettyLoad(fileInfo.Name(), 64)
 
-	log.Println(fmt.Sprintf("Sending %s file to client: %s", fileName, clientAddr))
+	log.Printf("Sending %s file to client: %s", fileName, clientAddr)
 
 	var buffer = make([]byte, bufferSize)
 
-	log.Println(fmt.Sprintf("Starting file transfer to client %s", clientAddr))
+	log.Printf("Starting file transfer to client %s", clientAddr)
 
 	for {
-		_, erro := file.Read(buffer)
-		if erro == io.EOF {
+		_, err := file.Read(buffer)
+		if err == io.EOF {
 			break
 		}
 	}
@@ -42,5 +42,5 @@ func SendFile(filename, clientAddr string) []string {
 	log.Println(responseText)
 
 	result = append(result, responseText)
-	return result
+	return result, nil
 }

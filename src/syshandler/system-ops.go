@@ -19,13 +19,20 @@ func OperateCommandCore(cmd *models.Command) *Commands {
 // Run Command Operation
 func (coreCommand *Commands) RunCommand(c net.Conn, args ...string) {
 	var results []string
+	var arg string
 	if coreCommand.HasArgs {
-		results = coreCommand.Trigger(args[0])
+		arg = args[0]
 	} else {
-		results = coreCommand.Trigger(coreCommand.UnixCommand)
+		arg = coreCommand.UnixCommand
 	}
 
-	log.Println(fmt.Sprintf("%s -> %s", c.RemoteAddr().String(), coreCommand.Alias))
+	result, err := coreCommand.Trigger(arg)
+	if err != nil {
+		results = append(results, err.Error())
+	} else {
+		results = result
+	}
+	log.Printf("%s -> %s", c.RemoteAddr().String(), coreCommand.Alias)
 	for _, result := range results {
 		c.Write([]byte(fmt.Sprintln(result)))
 	}

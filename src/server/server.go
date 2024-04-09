@@ -19,9 +19,9 @@ func HandleConnection(c net.Conn) {
 	log.Println(fmt.Sprintf("Client %s connected ", clientRemoteAddr))
 	for {
 		c.Write([]byte(fmt.Sprintf("%s > ", clientRemoteAddr)))
-		clientData, erro := bufio.NewReader(c).ReadString('\n')
-		if erro != nil {
-			if erro == io.EOF {
+		clientData, err := bufio.NewReader(c).ReadString('\n')
+		if err != nil {
+			if err == io.EOF {
 				log.Println(fmt.Sprintf("Client %s left server", clientRemoteAddr))
 				break
 			}
@@ -42,9 +42,9 @@ func HandleConnection(c net.Conn) {
 		var commandCoreCheck models.Command
 
 		if resp != "" {
-			commandCoreCheck, erro = syscore.ValidateCommand(commandOnInput)
-			if erro != nil {
-				c.Write([]byte(fmt.Sprintf("%s\n", erro)))
+			commandCoreCheck, err = syscore.ValidateCommand(commandOnInput)
+			if err != nil {
+				c.Write([]byte(fmt.Sprintf("%s\n", err)))
 			} else {
 				sysExec := syshandler.OperateCommandCore(&commandCoreCheck)
 				sysExec.RunCommand(c, resp)

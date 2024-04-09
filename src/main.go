@@ -23,18 +23,18 @@ func main() {
 
 	port := ":" + arguments[1]
 
-	listener, erro := net.Listen("tcp4", port)
-	if erro != nil {
-		log.Fatal(erro)
+	listener, err := net.Listen("tcp4", port)
+	if err != nil {
+		log.Fatal(err)
 	}
 	defer listener.Close()
 
 	fmt.Printf("Starting server on port: %s \n", port)
 
 	for {
-		c, erro := listener.Accept()
-		if erro != nil {
-			log.Fatal(erro)
+		c, err := listener.Accept()
+		if err != nil {
+			log.Fatal(err)
 		}
 
 		go server.HandleConnection(c)
